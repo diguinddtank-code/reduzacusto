@@ -1,0 +1,6 @@
+{
+  "name": "Reduza Custos",
+  "description": "Plataforma de renegociação de crédito habitação com simulação ao vivo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
