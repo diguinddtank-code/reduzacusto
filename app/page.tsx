@@ -5,10 +5,12 @@ import Image from "next/image";
 import { Plus } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "@studio-freight/lenis";
+import Lenis from "lenis";
 import SplitType from "split-type";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Page() {
   const [formState, setFormState] = useState<"idle" | "loading" | "success">("idle");
@@ -261,6 +263,16 @@ export default function Page() {
       });
   }
 
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsClient(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isClient) return null;
+
   return (
     <div className="relative w-full z-10 text-white min-h-screen">
       
@@ -292,7 +304,6 @@ export default function Page() {
             Análise Gratuita
           </button>
           
-          {/* Hamburger Menu Toggle */}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-[6px] relative z-50 focus:outline-none">
              <span className="hamburger-line-1 w-6 h-[2px] bg-white block origin-center transition-transform"></span>
              <span className="hamburger-line-2 w-6 h-[2px] bg-white block"></span>
@@ -314,8 +325,25 @@ export default function Page() {
       </div>
 
       {/* Hero Section */}
-      <section className="hero hero-bg relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{ backgroundImage: "linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%)", backgroundSize: "30px 30px" }}></div>
+      <section className="hero relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-[#0F3460]">
+        {/* Animated backdrop canvas under the video */}
+        <div className="hero-bg absolute inset-0 z-0 opacity-30 pointer-events-none"></div>
+
+        {/* Clear, native-blending background video with high clarity */}
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline 
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-65 pointer-events-none"
+          src="https://www.reduzacustos.pt/videos/video.mp4"
+        ></video>
+
+        {/* Cinematic gradient curve: strong legibility on the left under text, crystal clear over the video on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F3460]/95 via-[#0F3460]/55 to-[#0F3460]/15 z-0 pointer-events-none"></div>
+
+        {/* Delicate structural grid */}
+        <div className="absolute inset-0 z-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: "linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%)", backgroundSize: "30px 30px" }}></div>
         
         <div className="max-w-7xl mx-auto px-6 w-full z-10 grid md:grid-cols-[1.2fr_1fr] gap-12 md:gap-16 items-center">
           
@@ -516,7 +544,7 @@ export default function Page() {
                 <label className="text-[11px] md:text-[13px] uppercase tracking-wider text-[#8892A4]">Valor do Crédito</label>
                 <span className="font-display text-xl md:text-2xl text-white">€{creditRange.toLocaleString('pt-PT')}</span>
               </div>
-              <input type="range" min="50000" max="500000" step="5000" value={creditRange} onChange={(e:any) => setCreditRange(e.target.value)} className="w-full" />
+              <input type="range" min="50000" max="500000" step="5000" value={creditRange} onChange={(e:any) => setCreditRange(Number(e.target.value))} className="w-full" />
             </div>
 
             <div className="mb-8 md:mb-10">
@@ -617,7 +645,7 @@ export default function Page() {
             ].map((t, i) => (
               <div key={i} className="testimonial-card flex-none w-[85vw] md:w-[400px] bg-white/[0.04] border border-white/[0.06] rounded-2xl p-8 md:p-10 relative">
                 <div className="absolute top-4 right-6 font-display text-[80px] md:text-[100px] opacity-10 text-white leading-none">&quot;</div>
-                <p className="text-[15px] md:text-[16px] text-white/90 italic leading-relaxed mb-10 relative z-10 whitespace-normal">&quot;{t.txt}&quot;</p>
+                 <p className="text-[15px] md:text-[16px] text-white/90 italic leading-relaxed mb-10 relative z-10 whitespace-normal">&quot;{t.txt}&quot;</p>
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#F3C05A] to-[#E8A020] flex items-center justify-center text-[#0F3460] font-bold font-display text-lg md:text-xl">{t.i}</div>
                   <div>

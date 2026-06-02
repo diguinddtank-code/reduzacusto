@@ -19,6 +19,9 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Reduza Custos | Pague Menos No Seu Crédito Habitação',
   description: 'Análise gratuita e sem compromisso para renegociar o seu crédito habitação. A sua poupança começa hoje com especialistas autorizados.',
+};
+
+export const viewport = {
   themeColor: '#0F3460',
 };
 
